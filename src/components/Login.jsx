@@ -16,7 +16,7 @@ const Login = () => {
     //validate the form
 
     const message = checkValidData(email.current.value, password.current.value);
-    console.log(message);
+    setErrorMessage(message);
   }
 
   return (
@@ -64,6 +64,7 @@ const Login = () => {
           >
             {isSignInForm ? "Sign In" : "Sign up"}
           </button>
+          <p className=" text-red-500 text-sm">{errorMessage}</p>
           <p onClick={toggleForm} className=" cursor-pointer">
             {isSignInForm?"New to netflix? sign up":"already have an account? sign in"}
           </p>
