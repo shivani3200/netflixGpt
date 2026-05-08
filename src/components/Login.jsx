@@ -7,12 +7,15 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState();
   const email = useRef(null);
   const password = useRef(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -46,6 +49,7 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
+          navigate("/");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -61,6 +65,7 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
+          navigate("/browse");
           console.log(email.current.value);
           console.log(password.current.value);
           console.log(user);
