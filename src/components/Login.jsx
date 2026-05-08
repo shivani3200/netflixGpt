@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from "./Header";
 import netflixImg from "../assets/images/netflix.webp";
 import { checkValidData } from "../utils/checkValidData";
@@ -13,6 +13,18 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState();
   const email = useRef(null);
   const password = useRef(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (email.current) {
+        email.current.value = "";
+      }
+
+      if (password.current) {
+        password.current.value = "";
+      }
+    }, 100);
+  }, []);
 
   const toggleForm = () => {
     setIsSignInForm(!isSignInForm);
@@ -56,7 +68,7 @@ const Login = () => {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(error)
+          console.log(error);
         });
     }
   };
@@ -73,6 +85,7 @@ const Login = () => {
 
       <div className="flex justify-center items-center h-full">
         <form
+          autoComplete="off"
           onSubmit={(e) => e.preventDefault()}
           className="bg-black bg-opacity-80 p-8 w-3/12 text-white rounded-md "
         >
@@ -87,24 +100,27 @@ const Login = () => {
               name=""
               id=""
               className="w-full p-2 mb-4 bg-[#333333] text-sm rounded"
+              defaultValue=""
             />
           )}
           <input
             ref={email}
             type="text"
             placeholder="email"
-            name=""
+            name="user_email"
             id=""
             className="w-full p-2 mb-4 bg-[#333333] text-sm rounded"
+            defaultValue=""
           />
 
           <input
             ref={password}
             type="password"
             placeholder="password"
-            name=""
+            name="user_password"
             id=""
             className="w-full p-2 mb-4 bg-[#333333] text-sm rounded"
+            defaultValue=""
           />
           <button
             onClick={handleButtonCLick}
