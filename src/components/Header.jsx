@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import logo from "../assets/images/Netflix_Logo.png";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
+import { LOGO } from "../utils/constants";
 
 const Header = () => {
   //subscribe to the user slice of the store
@@ -24,6 +24,8 @@ const Header = () => {
         navigate("/");
       }
     });
+
+    //unsubscribe when component unmounts
     return unsubscribe;
   }, [dispatch]);
 
@@ -38,13 +40,13 @@ const Header = () => {
 
   return (
     <div className="absolute w-screen h-28 z-10 px-8 py-2 bg-gradient-to-b from-black flex justify-between items-center ">
-      <img src={logo} alt="logo" className="w-44" />
+      <img src={LOGO} alt="logo" className="w-44" />
 
       {user && (
         <div className="flex justify-between items-center gap-3 ">
           <img
             src={user?.photoURL}
-            alt="logo"
+            alt="user_avatar"
             className="w-14 h-14 rounded-full border-red-500 border-2 p-[1px]"
           />
           <button
