@@ -1,19 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../assets/images/Netflix_Logo.png";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice";
 
 const Header = () => {
-  const navigate = useNavigate();
   //subscribe to the user slice of the store
   const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("-----------------", user);
+      if (user) {
+        const { uid, email, displayName, photoURL } = user;
+        dispatch(addUser({ uid, email, displayName, photoURL }));
+        navigate("/browse");
+      } else {
+        dispatch(removeUser());
+        navigate("/");
+      }
+    });
+    return unsubscribe;
+  }, [dispatch]);
 
   const handleSignout = () => {
     signOut(auth)
       .then(() => {
-        navigate("/");
       })
       .catch((error) => {
         navigate("/error");
@@ -23,7 +39,7 @@ const Header = () => {
   return (
     <div className="absolute w-screen h-28 z-10 px-8 py-2 bg-gradient-to-b from-black flex justify-between items-center ">
       <img src={logo} alt="logo" className="w-44" />
-      
+
       {user && (
         <div className="flex justify-between items-center gap-3 ">
           <img
